@@ -1,10 +1,11 @@
 package tests
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 
-	"github.com/goccy/go-json"
+	"github.com/bytedance/sonic"
 
 	"github.com/kaptinlin/jsonschema"
 )
@@ -28,7 +29,7 @@ func TestConstValueUnmarshalJSON(t *testing.T) {
 
 	for _, tt := range tests {
 		var cv jsonschema.ConstValue
-		err := json.Unmarshal([]byte(tt.input), &cv)
+		err := sonic.Unmarshal([]byte(tt.input), &cv)
 		if err != nil {
 			if tt.err == nil || reflect.TypeOf(err) != reflect.TypeOf(tt.err) {
 				t.Errorf("UnmarshalJSON(%s) error = %v, wantErr %v", tt.input, err, tt.err)
@@ -92,7 +93,7 @@ func TestUnmarshalJSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var schema jsonschema.Schema
-			err := json.Unmarshal([]byte(tt.jsonStr), &schema)
+			err := sonic.Unmarshal([]byte(tt.jsonStr), &schema)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UnmarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
 			}
